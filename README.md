@@ -3,3 +3,4 @@
 [main a96a1c2] README-ге сүйікті пән қосу.
  1 file changed, 1 insertion(+)
 Мег GIT үйреніп жатырм.
+Сәлем Адельден өзгеріс
