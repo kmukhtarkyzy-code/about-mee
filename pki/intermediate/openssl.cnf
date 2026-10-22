@@ -1,0 +1,70 @@
+[ ca ]
+default_ca = CA_default
+
+[ CA_default ]
+dir             = ./intermediate
+certs           = $dir/certs
+crl_dir         = $dir/crl
+new_certs_dir   = $dir/newcerts
+database        = $dir/index.txt
+serial          = $dir/serial
+crlnumber       = $dir/crl_number
+private_key     = $dir/private/intermediate.key.pem
+certificate     = $dir/certs/intermediate.cert.pem
+crl             = $dir/crl/intermediate.crl.pem
+default_md      = sha256
+default_days    = 375
+default_crl_days = 7
+unique_subject  = no
+policy          = policy_loose
+
+[ policy_loose ]
+countryName             = optional
+organizationName        = optional
+organizationalUnitName  = optional
+commonName              = supplied
+emailAddress            = optional
+
+[ req ]
+default_bits            = 2048
+distinguished_name      = req_dn
+string_mask             = utf8only
+default_md      = sha256
+
+[ req_dn ]
+countryName             = Country (2 letters)
+organizationName        = Organization
+commonName              = Common Name
+
+[ server_cert ]
+basicConstraints        = CA:FALSE
+subjectKeyIdentifier    = hash
+authorityKeyIdentifier  = keyid,issuer:always
+keyUsage                = critical, digitalSignature, keyEncipherment
+extendedKeyUsage        = serverAuth
+subjectAltName          = @alt_names
+crlDistributionPoints   = URI:http://127.0.0.1:8080/intermediate.crl
+authorityInfoAccess     = OCSP;URI:http://127.0.0.1:2560
+
+[ alt_names ]
+DNS.1 = edu.portal.local
+DNS.2 = *.edu.portal.local
+IP.1 = 127.0.0.1
+
+[ usr_cert ]
+basicConstraints        = CA:FALSE
+subjectKeyIdentifier    = hash
+authorityKeyIdentifier  = keyid,issuer
+keyUsage                = critical, digitalSignature, nonRepudiation, keyEncipherment
+extendedKeyUsage        = clientAuth, emailProtection
+authorityInfoAccess     = OCSP;URI:http://127.0.0.1:2560
+
+[ ocsp ]
+basicConstraints        = CA:FALSE
+subjectKeyIdentifier    = hash
+authorityKeyIdentifier  = keyid,issuer
+keyUsage                = critical, digitalSignature
+extendedKeyUsage        = critical, OCSPSigning
+
+[ crl_ext ]
+authorityKeyIdentifier  = keyid:always
